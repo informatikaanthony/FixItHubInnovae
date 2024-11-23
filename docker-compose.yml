@@ -1,70 +1,58 @@
-version: '3.8'
-
 services:
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    restart: unless-stopped
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx:/etc/nginx/conf.d            # Configuración de Nginx
-      - ./frontend:/usr/share/nginx/html      # Archivos de frontend de Angular
-      - ./backend:/var/www                   # Código del Backend Laravel
-    depends_on:
-      - backend
-    networks:
-      - app-network
-
-  backend:
+  # Servicio Frontend (Angular)
+  frontend-app:
     build:
-      context: .
-      dockerfile: Dockerfile-backend
-    container_name: backend
-    restart: unless-stopped
-    working_dir: /var/www
+      context: ./angular  # Ruta donde está el Dockerfile
+      dockerfile: Dockerfile  # Dockerfile para el frontend
+    container_name: frontend
     volumes:
-      - ./backend:/var/www
+      - ./angular/frontend-app:/app
+    ports:
+      - "4200:4200"  # Exponemos el puerto 4200 para Angular
+    networks:
+      - app-network  # Conecta el servicio a la red compartida
+    command: ["tail", "-f", "/dev/null"]
+
+  # Servicio Backend (Laravel + PHP)
+  backend-app:
+    build:
+      context: ./laravel  # Ruta donde está el código de tu aplicación Laravel
+      dockerfile: Dockerfile  # Dockerfile para el backend
+    container_name: backend
+    volumes:
+    - ./laravel/backend-app:/backend-app
     environment:
-      - APP_ENV=local
-      - APP_DEBUG=true
-      - DB_CONNECTION=sqlsrv
-      - DB_HOST=db
+      - DB_HOST=sqlserver-db
       - DB_PORT=1433
-      - DB_DATABASE=tall
+      - DB_DATABASE=backend
       - DB_USERNAME=sa
       - DB_PASSWORD=P@ssw0rd13579
     depends_on:
-      - db
+      - sqlserver-db  # Asegura que SQL Server esté disponible antes de iniciar Laravel
+    ports:
+      - "8000:8000"  # Expone el puerto 8000 para Laravel
     networks:
-      - app-network
+      - app-network  # Conecta el servicio a la red compartida
+    command: ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
 
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile-frontend
-    container_name: frontend
-    restart: unless-stopped
-    working_dir: /app
-    volumes:
-      - ./frontend:/app
-    command: >
-      sh -c "npm install && npm run build -- --prod"
-    networks:
-      - app-network
-
-  db:
+  # Servicio de SQL Server
+  sqlserver-db:
     image: rapidfort/microsoft-sql-server-2019-ib:latest
-    container_name: sqlserver
+    container_name: sqlserver-db
     restart: unless-stopped
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=P@ssw0rd13579
     ports:
-      - "1433:1433"
+      - "1433:1433"  # Exponemos el puerto de SQL Server
     networks:
-      - app-network
+      - app-network  # Conecta el servicio a la red compartida
 
+# Definición de Volúmenes
+volumes:
+  sqlserver-data:  # Volumen para almacenar los datos persistentes de SQL Server
+
+# Redes para los contenedores
 networks:
   app-network:
-
+    driver: bridge
