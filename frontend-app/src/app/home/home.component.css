@@ -1,0 +1,48 @@
+ul{
+    list-style-type: none;
+    background-color: brown;
+    padding: 10px;
+    color: white;
+    text-align: right;
+    height: 40px;
+}
+a{
+    text-decoration: none;
+    color: white;
+}
+
+li{
+    font-size: 1.1rem;
+    display: inline;
+    padding: 10px;
+}
+
+li:hover{
+    background-color: blueviolet;
+    border-radius: 10px;
+}
+
+section {
+    width: 100vw;
+    height: calc(100vh - 80px);
+    background-image: url('../../assets/img/angularbackground.webp');
+    background-size: cover;  
+    color: black;
+    background-position: center;
+    text-align: center;
+}
+section h1,p{
+    padding-top: 25px;
+    z-index: 2;
+}
+
+footer{
+    height: 40px;
+    position: absolute;
+    bottom: 0;
+    width: 100vw;
+    text-align: center;
+    background-color: black;
+    color: white;
+    font-size: 1.2rem;
+}

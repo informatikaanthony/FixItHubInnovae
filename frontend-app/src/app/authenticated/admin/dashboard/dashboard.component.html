@@ -1,0 +1,57 @@
+<app-header/>
+<div class="container">
+  <app-sidebar/>
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <h1>Bienvenido, Administrador</h1>
+    <section class="incident-table">
+      <h2>Incidencias</h2>
+      <table id="incident-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Asignado a</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Fallo en el servidor</td>
+            <td>To Do</td>
+            <td>Anthony</td>
+            <td>
+              <button class="btn edit-btn">Editar</button>
+              <button class="btn assign-btn">Asignar</button>
+              <button class="btn delete-btn">Eliminar</button>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Error en la aplicación</td>
+            <td>Doing</td>
+            <td>Jon</td>
+            <td>
+              <button class="btn edit-btn">Editar</button>
+              <button class="btn assign-btn">Asignar</button>
+              <button class="btn delete-btn">Eliminar</button>
+            </td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Problema con la base de datos</td>
+            <td>Done</td>
+            <td>Jon</td>
+            <td>
+              <button class="btn edit-btn">Editar</button>
+              <button class="btn assign-btn">Asignar</button>
+              <button class="btn delete-btn">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
