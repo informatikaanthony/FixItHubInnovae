@@ -1,6 +1,13 @@
-import { NgIf, } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -12,12 +19,16 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup; // Definición inicial del formulario
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     // Inicialización del formulario reactivo
     this.loginForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
@@ -26,7 +37,18 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
     if (this.loginForm.valid) {
       console.log('Formulario válido:', this.loginForm.value);
-      // Aquí se incluiría la lógica para interactuar con un backend
+
+      // Llamada al service
+      const { email, password } = this.loginForm.value;
+      this.authService.login(email, password).subscribe({
+        next: (response) => {
+          console.log('Login exitoso:', response);
+          this.router.navigate(['/dashboard']); // Redirige tras el login exitoso
+        },
+        error: (error) => {
+          console.error('Error durante el login:', error.message);
+        },
+      });
     } else {
       console.log('Formulario inválido');
       this.loginForm.markAllAsTouched(); // Marca los campos para mostrar errores

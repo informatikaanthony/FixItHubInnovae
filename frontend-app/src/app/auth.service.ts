@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError} from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 
 // Define la URL de tu API
-const API_URL = 'https://localhost:8000'; // Reemplázalo con tu URL real
+const API_URL = 'http://localhost:8000'; // Reemplázalo con tu URL real
 
 @Injectable({
   providedIn: 'root'
@@ -12,16 +13,41 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  login(username: string, password: string): Observable<any> {
-    // Prepara el cuerpo de la solicitud
+  // Método para hacer login
+  login(email: string, password: string): Observable<any> {
+    const url = `${API_URL}/login`;
     const body = {
-      username: username,
+      email: email, 
       password: password
     };
 
-    // Realiza la solicitud POST a la API para hacer login
-    return this.http.post(API_URL, body);
+    return this.http.post(url, body)
+      .pipe(
+        tap((response:any)=>{
+          if (response && response.access_token){
+            this.saveToken(response.access_token);
+          }
+        }),
+        catchError(this.handleError)
+      );
   }
 
-  // Aquí puedes agregar otros métodos como logout, etc.
+  private saveToken(token: string): void {
+    localStorage.setItem('access_token', token);
+  }
+
+  // Método para manejar errores
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    let errorMessage = 'Ocurrió un error desconocido.';
+    if (error.error instanceof ErrorEvent) {
+      // Error del lado del cliente
+      errorMessage = `Error del cliente: ${error.error.message}`;
+    } else {
+      // Error del lado del servidor
+      errorMessage = `Error del servidor: ${error.status} - ${error.message}`;
+    }
+
+    console.error(errorMessage); // Log del error (opcional)
+    return throwError(() => new Error(errorMessage)); // Devuelve un Observable con el error
+  }
 }
