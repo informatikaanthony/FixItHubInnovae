@@ -1,0 +1,89 @@
+<section class="modal-overlay" (click)="onCancel()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <h3>Crear Incidencia</h3>
+    <form #form="ngForm" (ngSubmit)="onSave()" novalidate>
+      
+      <!-- Campo Título -->
+      <div>
+        <label for="title">Título</label>
+        <input
+          type="text"
+          id="title"
+          [(ngModel)]="incidence.title"
+          name="title"
+          #title="ngModel"
+          required
+          minlength="5"
+          maxlength="50"
+        />
+        <div *ngIf="title.invalid && (title.dirty || title.touched)" class="error-message">
+          <small *ngIf="title.errors && title.errors['required']">El título es obligatorio.</small>
+          <small *ngIf="title.errors && title.errors['minlength']">El título debe tener al menos 5 caracteres.</small>
+          <small *ngIf="title.errors && title.errors['maxlength']">El título no puede superar los 50 caracteres.</small>
+        </div>
+      </div>
+
+      <!-- Campo Descripción -->
+      <div>
+        <label for="description">Descripción</label>
+        <textarea
+          id="description"
+          [(ngModel)]="incidence.description"
+          name="description"
+          #description="ngModel"
+          required
+          minlength="10"
+          rows="4"
+          cols="50"
+        ></textarea>
+        <div *ngIf="description.invalid && (description.dirty || description.touched)" class="error-message">
+          <small *ngIf="description.errors && description.errors['required']">La descripción es obligatoria.</small>
+          <small *ngIf="description.errors && description.errors['minlength']">La descripción debe tener al menos 10 caracteres.</small>
+        </div>
+      </div>
+      
+
+      <!-- Campo Asignado a -->
+      <div>
+        <label for="assigned_to">Asignado a</label>
+        <select
+          id="assigned_to"
+          [(ngModel)]="incidence.assigned_to"
+          name="assigned_to"
+          #assignedTo="ngModel"
+          required
+        >
+          <option *ngFor="let user of users" [value]="user.id">
+            {{ user.name }}
+          </option>
+        </select>
+        <div *ngIf="assignedTo.invalid && (assignedTo.dirty || assignedTo.touched)" class="error-message">
+          <small>Debes seleccionar un usuario.</small>
+        </div>
+      </div>
+
+      <!-- Campo Estado -->
+      <div>
+        <label for="status">Estado</label>
+        <select
+          id="status"
+          [(ngModel)]="incidence.incidence_status_id"
+          name="status"
+          #status="ngModel"
+          required
+        >
+          <option *ngFor="let status of statuses" [value]="status.id">
+            {{ status.description }}
+          </option>
+        </select>
+        <div *ngIf="status.invalid && (status.dirty || status.touched)" class="error-message">
+          <small>Debes seleccionar un estado.</small>
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <button type="submit" class="btn save-btn" [disabled]="form.invalid">Guardar Cambios</button>
+      <button type="button" class="btn cancel-btn" (click)="onCancel()">Cancelar</button>
+    </form>
+  </div>
+</section>

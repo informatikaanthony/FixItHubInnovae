@@ -1,33 +1,55 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './auth.guard';
+import { authGuard } from './auth/guard/auth.guard';
+import { adminAuthGuard } from './auth/guard/admin/admin-auth.guard';
+import { ROUTE_NAMES } from './routes-names';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: ROUTE_NAMES.HOME,
     title: 'home',
-    loadComponent: () => import('./home/home.component').then(c => c.HomeComponent), 
+    loadComponent: () => import('./home/home.component').then(c => c.HomeComponent),
   },
   {
-    path: 'login',
+    path: ROUTE_NAMES.LOGIN,
     title: 'login',
     loadComponent: () => import('./login/login.component').then(c => c.LoginComponent),
   },
+  // Acceso de Administrador
   {
-    path: 'admin-dashboard',
-    title: 'admin dashboard',
-    loadComponent: () =>import('./authenticated/admin/dashboard/dashboard.component').then(c=>c.DashboardComponent),
-    canActivate: [authGuard]
+    path: ROUTE_NAMES.ADMIN.BASE,
+    canActivate: [adminAuthGuard],
+    children: [
+      {
+        path: ROUTE_NAMES.ADMIN.DASHBOARD,
+        title: 'admin dashboard',
+        loadComponent: () =>
+          import('./authenticated/admin/dashboard/dashboard.component').then(c => c.DashboardComponent),
+      },
+      {
+        path: ROUTE_NAMES.ADMIN.ROLES,
+        title: 'admin roles',
+        loadComponent: () =>
+          import('./authenticated/admin/roles/roles.component').then(c => c.RolesComponent),
+      },
+      {
+        path: ROUTE_NAMES.ADMIN.USERS,
+        title: 'admin users',
+        loadComponent: () =>
+          import('./authenticated/admin/users/users.component').then(c => c.UsersComponent),
+      },
+    ],
   },
+  // Acceso de Soporte
   {
-    path: 'admin-roles',
-    title: 'admin roles',
-    loadComponent: () =>import('./authenticated/admin/roles/roles.component').then(c=>c.RolesComponent),
-    canActivate: [authGuard]
-  },
-  {
-    path: 'admin-users',
-    title: 'admin users',
-    loadComponent: () =>import('./authenticated/admin/users/users.component').then(c=>c.UsersComponent),
-    canActivate: [authGuard]
+    path: ROUTE_NAMES.SUPPORT.BASE,
+    canActivate: [authGuard],
+    children: [
+      {
+        path: ROUTE_NAMES.SUPPORT.DASHBOARD,
+        title: 'support dashboard',
+        loadComponent: () =>
+          import('./authenticated/dashboard/dashboard.component').then(c => c.DashboardComponent),
+      },
+    ],
   },
 ];

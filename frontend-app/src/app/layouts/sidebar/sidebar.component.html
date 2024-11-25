@@ -1,8 +1,19 @@
 <aside class="sidebar">
-    <ul>
-      <li><a [routerLink]="['/admin-dashboard']" >Dashboard</a></li>
-      <li><a [routerLink]="['/admin-users']" >Gestionar Ususarios</a></li>
-      <li><a [routerLink]="['/admin-roles']" >Gestionar Roles</a></li>
-    </ul>
-  </aside>
-  
+  <ul>
+    <!-- Solo mostrar si el rol del usuario es Admin -->
+    <li *ngIf="userRole === 'Admin'">
+      <a [routerLink]="['/', ROUTE_NAMES.ADMIN.BASE, ROUTE_NAMES.ADMIN.USERS]">Gestionar Usuarios</a>
+    </li>
+    <li *ngIf="userRole === 'Admin'">
+      <a [routerLink]="['/', ROUTE_NAMES.ADMIN.BASE, ROUTE_NAMES.ADMIN.ROLES]">Gestionar Roles</a>
+    </li>
+    <li *ngIf="userRole === 'Admin'">
+      <a [routerLink]="['/', ROUTE_NAMES.ADMIN.BASE, ROUTE_NAMES.ADMIN.DASHBOARD]">Gestionar Incidencias</a>
+    </li>
+
+    <!-- Mostrar solo si el rol no es Admin -->
+    <li *ngIf="userRole !== 'Admin'">
+      <a [routerLink]="['/', ROUTE_NAMES.ADMIN.BASE, ROUTE_NAMES.SUPPORT.DASHBOARD]">Gestionar Incidencias</a>
+    </li>
+  </ul>
+</aside>

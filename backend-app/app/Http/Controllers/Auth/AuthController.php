@@ -19,7 +19,7 @@ class AuthController extends Controller
             // Verificar las credenciales del usuario
             if (!Auth::attempt($credentials)) {
                 return response()->json([
-                    'status' => 'false',
+                    'status' => false,
                     'message' => 'Credenciales incorrectas, por favor revise usuario y contraseña'
                 ], 401);
             }
@@ -31,15 +31,25 @@ class AuthController extends Controller
             $token = $user->createToken('auth_token')->plainTextToken;
 
             // Devolver el token al usuario
-            return response()->json([
-                'status' => 'true',
-                'access_token' => $token,
-                'token_type' => 'Bearer',
+            return response()->json(
+                [
+                'auth'=> [
+                    'status' => true,
+                    'access_token' => $token,
+                    'token_type' => 'Bearer',
+                    'expires_at' => $user->tokens->last()->expires_at,
+                    'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'role' => $user->role->description,
+                ]                
+            ],
             ]);
         } catch (\Exception $e) {
             // Capturar cualquier excepción y devolver un mensaje de error
             return response()->json([
-                'status' => 'false',
+                'status' => false,
                 'message' => 'Hubo un error al procesar la solicitud',
                 'error' => $e->getMessage() // Muestra el mensaje de error para debugging (solo en desarrollo)
             ], 500);

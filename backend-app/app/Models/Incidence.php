@@ -19,6 +19,7 @@ class Incidence extends Model
         'incidence_status_id',
         'status',
         'assigned_to',
+        'assigned_to_role',
         'created_by'
     ];
 
@@ -60,4 +61,5 @@ class Incidence extends Model
     {
         return $this->status;
     }
+
 }

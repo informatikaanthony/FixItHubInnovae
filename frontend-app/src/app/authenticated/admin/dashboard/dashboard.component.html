@@ -1,15 +1,21 @@
-<app-header/>
+<app-header />
 <div class="container">
-  <app-sidebar/>
+  <app-sidebar />
   <!-- Main Content Area -->
   <main class="main-content">
     <h1>Bienvenido, Administrador</h1>
     <section class="incident-table">
-      <h2>Incidencias</h2>
+      
+      <div class="header-actions">
+        <h2>Incidencias</h2>
+        <button class="btn add-btn" (click)="toggleAddIncidence()">Añadir Incidencia</button>
+      </div>
+      
       <table id="incident-table">
         <thead>
           <tr>
             <th>ID</th>
+            <th>Titulo</th>
             <th>Descripción</th>
             <th>Estado</th>
             <th>Asignado a</th>
@@ -17,41 +23,42 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Fallo en el servidor</td>
-            <td>To Do</td>
-            <td>Anthony</td>
+          <tr *ngFor="let incidence of incidences">
+            <td>{{ incidence.id }}</td>
+            <td>{{ incidence.title }}</td>
+            <td>{{ incidence.description }}</td>
+            <td>{{ incidence.incidence_status.description }}</td>
+            <td>{{ incidence.assigned_user.name }}</td>
             <td>
-              <button class="btn edit-btn">Editar</button>
-              <button class="btn assign-btn">Asignar</button>
-              <button class="btn delete-btn">Eliminar</button>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Error en la aplicación</td>
-            <td>Doing</td>
-            <td>Jon</td>
-            <td>
-              <button class="btn edit-btn">Editar</button>
-              <button class="btn assign-btn">Asignar</button>
-              <button class="btn delete-btn">Eliminar</button>
-            </td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Problema con la base de datos</td>
-            <td>Done</td>
-            <td>Jon</td>
-            <td>
-              <button class="btn edit-btn">Editar</button>
-              <button class="btn assign-btn">Asignar</button>
-              <button class="btn delete-btn">Eliminar</button>
+              <button class="btn edit-btn" (click)="editIncidence(incidence)">Editar</button>
+              <button class="btn delete-btn" (click)="deleteIncidence(incidence.id)">Eliminar</button>
             </td>
           </tr>
         </tbody>
       </table>
+
+      <!-- Mostrar el componente hijo si hay una incidencia seleccionada -->
+      <app-edit-incidence *ngIf="selectedIncidence" 
+                          [incidence]="selectedIncidence" 
+                          [statuses]="statuses"
+                          [users]="users"
+                          (save)="updateIncidence($event)" 
+                          (cancel)="cancelEdit()">
+      </app-edit-incidence>
+
+      <app-add-incidence
+      *ngIf="isAddingIncidence" 
+  [users]="users"
+  [statuses]="statuses"
+  (save)="createIncidence($event)"
+  (cancel)="cancelCreation()">
+</app-add-incidence>
+
+
+      <!-- Mensaje de error -->
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
     </section>
   </main>
 </div>

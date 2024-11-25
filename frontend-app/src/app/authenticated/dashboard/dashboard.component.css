@@ -1,0 +1,44 @@
+.header-actions {
+    display: flex;
+    align-items: center; /* Alinea el contenido verticalmente en el centro */
+    justify-content: space-between; /* Espacia los elementos a los extremos */
+    margin-bottom: 20px; /* Añade espacio debajo del encabezado */
+  }
+  
+  .header-actions h2 {
+    margin: 0; /* Remueve márgenes alrededor del título */
+    font-size: 24px;
+  }
+  
+  .btn {
+    display: inline-flex; /* Asegura un buen comportamiento en botones */
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .add-btn {
+    background-color: #28a745; /* Color verde */
+    color: white; /* Texto en blanco */
+  }
+  
+  .add-btn:hover {
+    background-color: #218838; /* Verde más oscuro en hover */
+    transform: scale(1.05); /* Efecto de escala al pasar el ratón */
+  }
+  
+  .add-btn:active {
+    background-color: #1e7e34; /* Verde aún más oscuro al presionar */
+    transform: scale(0.95); /* Reducir levemente al presionar */
+  }
+  
+  .error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  

@@ -1,0 +1,63 @@
+<app-header />
+<div class="container">
+  <app-sidebar />
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <h1>Bienvenido, Soporte</h1>
+    <section class="incident-table">
+      
+      <div class="header-actions">
+        <h2>Incidencias</h2>
+        <button class="btn add-btn" (click)="toggleAddIncidence()">Añadir Incidencia</button>
+      </div>
+      
+      <table id="incident-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Titulo</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Asignado a</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let incidence of incidences">
+            <td>{{ incidence.id }}</td>
+            <td>{{ incidence.title }}</td>
+            <td>{{ incidence.description }}</td>
+            <td>{{ incidence.incidence_status.description }}</td>
+            <td>{{ incidence.assigned_user.name }}</td>
+            <td>
+              <button class="btn edit-btn" (click)="editIncidence(incidence)">Editar</button>
+              <button class="btn delete-btn" (click)="deleteIncidence(incidence.id)">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Mostrar el componente hijo si hay una incidencia seleccionada -->
+      <app-edit-support-incidence *ngIf="selectedIncidence" 
+                          [incidence]="selectedIncidence" 
+                          [statuses]="statuses"
+                          [currentUser]="currentUser"
+                          (save)="updateIncidence($event)" 
+                          (cancel)="cancelEdit()">
+      </app-edit-support-incidence>
+
+      <app-add-support-incidence
+      *ngIf="isAddingIncidence" 
+      [currentUser]="currentUser"
+      [statuses]="statuses"
+      (save)="createIncidence($event)"
+      (cancel)="cancelCreation()">
+      </app-add-support-incidence>
+
+      <!-- Mensaje de error -->
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+    </section>
+  </main>
+</div>

@@ -18,12 +18,14 @@ return new class extends Migration
             $table->unsignedTinyInteger('incidence_status_id');
             $table->boolean('status')->default(true); // para saber si esta eliminada o no
             $table->unsignedBigInteger('assigned_to');
+            $table->unsignedTinyInteger('assigned_to_role')->default(2);
             $table->unsignedBigInteger('created_by');
             $table->timestamps(); // created_at y updated_at
 
             $table->foreign('incidence_status_id')->references('id')->on('incidence_statuses')->onDelete('cascade'); 
             $table->foreign('assigned_to')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('assigned_to_role')->references('id')->on('roles')->onDelete('cascade'); 
 
         });
     }

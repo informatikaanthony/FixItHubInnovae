@@ -1,12 +1,13 @@
 <header>
-    <div class="navbar">
-      <div class="logo">Gestor de Incidencias</div>
-      <nav>
-        <ul>
-          <li><a href="#" id="home-link">Inicio</a></li>
-          <li><a href="#" id="incidents-link">Incidencias</a></li>
-          <li><a href="#" id="logout-link">Cerrar sesión</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+  <div class="navbar">
+    <div class="logo">Gestor de Incidencias</div>
+    <nav>
+      <ul>
+        <!-- Cerrar sesión -->
+        <li>
+          <a href="#" id="logout-link" (click)="logout($event)">Cerrar sesión</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>

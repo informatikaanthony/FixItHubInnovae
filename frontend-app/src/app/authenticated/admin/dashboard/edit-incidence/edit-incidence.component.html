@@ -1,0 +1,33 @@
+<section *ngIf="incidence" class="modal-overlay" (click)="onCancel()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <h3>Editar Incidencia</h3>
+    <form (ngSubmit)="onSave()">
+      <div>
+        <label for="title">Título</label>
+        <input type="text" id="title" [(ngModel)]="incidence.title" name="title" required />
+      </div>
+      <div>
+        <label for="description">Descripción</label>
+        <input type="text" id="description" [(ngModel)]="incidence.description" name="description" required />
+      </div>
+      <div>
+        <label for="assigned_to">Asignado a</label>
+        <select id="assigned_to" [(ngModel)]="incidence.assigned_to" name="assigned_to">
+          <option *ngFor="let user of users" [value]="user.id">
+            {{ user.name }}
+          </option>
+        </select>
+      </div>
+      <div>
+        <label for="status">Estado</label>
+        <select id="status" [(ngModel)]="incidence.incidence_status_id" name="status">
+          <option *ngFor="let status of statuses" [value]="status.id">
+            {{ status.description }}
+          </option>
+        </select>
+      </div>
+      <button type="submit" class="btn save-btn">Guardar Cambios</button>
+      <button type="button" class="btn cancel-btn" (click)="onCancel()">Cancelar</button>
+    </form>
+  </div>
+</section>

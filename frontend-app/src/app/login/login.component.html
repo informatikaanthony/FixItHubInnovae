@@ -3,11 +3,15 @@
 
   <form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
     <div class="form-group">
-      <label for="username">Email:</label>
+      <label for="email">Email:</label>
       <input id="email" type="email" formControlName="email" class="form-control"
         placeholder="Ingresa tu correo" />
       <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="error">
-        El usuario es obligatorio y debe tener al menos 3 caracteres.
+        El correo electrónico es obligatorio y debe ser válido.
+      </div>
+      <!-- Mostrar el error del backend si existe -->
+      <div *ngIf="formErrors['email']" class="error">
+        {{ formErrors['email'] }}
       </div>
     </div>
 
@@ -18,6 +22,15 @@
       <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error">
         La contraseña es obligatoria y debe tener al menos 6 caracteres.
       </div>
+      <!-- Mostrar el error del backend si existe -->
+      <div *ngIf="formErrors['password']" class="error">
+        {{ formErrors['password'] }}
+      </div>
+    </div>
+
+    <!-- Mostrar el mensaje de error general -->
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
     </div>
 
     <button type="submit" [disabled]="loginForm.invalid" class="btn btn-primary">

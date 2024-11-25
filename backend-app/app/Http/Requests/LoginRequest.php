@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Requests;
-namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -62,8 +61,8 @@ class LoginRequest extends FormRequest
 
         // Lanzar la excepción con una respuesta JSON
         throw new ValidationException($validator, response()->json([
-            'status' => 'false',
-            'message' => 'Los datos proporcionados no son válidos.',
+            'status' => false,
+            'message' => 'Los datos proporcionados no son validos.',
             'errors' => $errors,
         ], 422));
     }
